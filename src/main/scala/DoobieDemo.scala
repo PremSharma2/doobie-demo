@@ -230,6 +230,17 @@ def apply[M[_]: Async](
     updateAction.compile.toList.transact(xa)
   }
 
+
+  def updateJLYearOfProductionProgram(): IO[Int] = {
+    val year = 2021
+    val id = "5e5a39bb-a497-4432-93e8-7322f16ac0b2"
+    val frag: fragment.Fragment =sql"update movies set year_of_production = $year where id = $id"
+
+    val updateDsl: doobie.Update0 = frag.update
+    //Lift the DSL
+    updateDsl.run.transact(xa)
+  }
+
   override def run(args: List[String]): IO[ExitCode] =
     saveMultipleActors(List("Jai","Ram","Nizam","Rudresh"))
       .debug
